@@ -1,0 +1,20 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use teguh02\ApiResponse\Contracts\ApiValidatorInterface;
+
+class $CLASS_NAME$ApiValidator implements ApiValidatorInterface
+{
+    /**
+     * Validate the given data for the API response.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function validate(array $data) 
+    {  
+        // write your api validator code here
+        return $data;
+    }
+}

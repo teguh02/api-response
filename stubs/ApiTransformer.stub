@@ -1,0 +1,20 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use teguh02\ApiResponse\Contracts\ApiTransformerInterface;
+
+class $CLASS_NAME$ApiTransformer implements ApiTransformerInterface
+{
+    /**
+     * Transform the given data for the API response.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function transform(array $data) 
+    {
+        // write your api transformer code here
+        return $data;
+    }
+}
