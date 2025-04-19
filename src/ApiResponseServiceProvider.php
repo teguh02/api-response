@@ -8,6 +8,15 @@ use teguh02\ApiResponse\Commands\ApiResponseCommand;
 
 class ApiResponseServiceProvider extends PackageServiceProvider
 {
+    public function register()
+    {
+        $this->app->bind('api-response', function() {
+            return new ApiResponseBuilder(); 
+        });
+
+        parent::register();
+    }
+
     public function configurePackage(Package $package): void
     {
         /*

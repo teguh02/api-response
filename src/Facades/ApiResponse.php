@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Facade;
  */
 class ApiResponse extends Facade
 {
-    protected static function getFacadeAccessor(): string
+    protected static function getFacadeAccessor()
     {
-        return \teguh02\ApiResponse\ApiResponse::class;
+        return 'api-response';
     }
 }
