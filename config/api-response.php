@@ -9,6 +9,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | This value is the default configuration for the API response.
+    |
+    | debug is used to enable or disable the debug mode.
     | display_meta is used to display the meta in the response.
     | response is used to set the response format.
     | pagination is used to set the pagination format.
@@ -16,7 +18,9 @@ return [
     */
 
     'api' => [
+        'debug' => env('API_DEBUG', true),
         'display_meta' => env('API_DISPLAY_META', true),
+        'display_status_code' => env('API_DISPLAY_STATUS_CODE', true),
 
         'response' => [
             'data_key' => env('API_RESPONSE_DATA_KEY', 'data'),

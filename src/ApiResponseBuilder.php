@@ -15,34 +15,53 @@ use teguh02\ApiResponse\Response\CollectionApiResponse;
 class ApiResponseBuilder
 {
     protected $data;
-    protected $transformer;
-    protected $formatter;
-    protected $validator;
+    protected ?ApiTransformerInterface $transformer = null;
+    protected ?ApiFormatterInterface $formatter = null;
+    protected ?ApiValidatorInterface $validator = null;
     protected $statusCode = 200;
     protected $headers = [];
     protected $meta = [];
+    protected $debug = [];
 
     public function with(array|Collection|Builder $data)
     {
         $this->data = $data;
+        $this->debug['data'] = [
+            'data' => $data,
+            'type' => gettype($data),
+            'query' => match (true) {
+                $data instanceof Builder => $data->toSql(),
+                $data instanceof Collection => $data->toArray(),
+                default => $data,
+            },
+            'class' => match (true) {
+                $data instanceof Builder => get_class($data),
+                $data instanceof Collection => get_class($data),
+                default => gettype($data),
+            },
+        ];
+
         return $this;
     }
 
-    public function transformWith(ApiTransformerInterface $transformer)
+    public function transformWith(?ApiTransformerInterface $transformer = null)
     {
         $this->transformer = $transformer;
+        $this->debug['transformer'] = $transformer;
         return $this;
     }
 
-    public function formatWith(ApiFormatterInterface $formatter)
+    public function formatWith(?ApiFormatterInterface $formatter = null)
     {
         $this->formatter = $formatter;
+        $this->debug['formatter'] = $formatter;
         return $this;
     }
 
-    public function validateWith(ApiValidatorInterface $validator)
+    public function validateWith(?ApiValidatorInterface $validator = null)
     {
         $this->validator = $validator;
+        $this->debug['validator'] = $validator;
         return $this;
     }
 
@@ -54,50 +73,44 @@ class ApiResponseBuilder
 
     public function withHeaders(array $headers = [])
     {
-        $this->headers = array_merge(config('api-response.headers', []), $headers);
+        $this->headers = array_merge($this->headers, $headers);
         return $this;
     }
 
     public function withMeta(array $meta = [])
     {
-        $this->meta = config('api-response.api.display_meta') 
-            ? array_merge(config('api-response.meta', []), $meta) 
-            : $meta;
-
+        $this->meta = array_merge($this->meta, $meta);
         return $this;
     }
 
     #️⃣ Defined Default status codes
     public function notFound() { $this->statusCode = 404; return $this; }
-
     public function success() { $this->statusCode = 200; return $this;}
-
     public function created() { $this->statusCode = 201; return $this; }
-
     public function badRequest() { $this->statusCode = 400; return $this; }
-
     public function unauthorized() { $this->statusCode = 401; return $this; }
-
     public function forbidden() { $this->statusCode = 403; return $this; }
-
     public function internalServerError() { $this->statusCode = 500; return $this; }
-
     public function notAcceptable() { $this->statusCode = 406; return $this; }
-
     public function notAllowed() { $this->statusCode = 405; return $this; }
+    public function serviceUnavailable() { $this->statusCode = 503; return $this; }
 
     public function build()
     {
-        Log::info('Building API response', [
-            'data' => $this->data,
-            'data_type' => gettype($this->data),
-            'transformer' => $this->transformer,
-            'formatter' => $this->formatter,
-            'validator' => $this->validator,
-            'statusCode' => $this->statusCode,
-            'headers' => $this->headers,
-            'meta' => $this->meta,
-        ]);
+        # Set default headers and meta
+        $this->headers = array_merge(config('api-response.headers', []));
+        $this->meta = config('api-response.api.display_meta') 
+            ? array_merge(config('api-response.meta', [])) 
+            : [];
+
+        # For Debugging purposes
+        if (config('api-response.api.debug')) {
+            $this->debug['status_code'] = $this->statusCode;
+            $this->debug['headers'] = $this->headers;
+            $this->debug['meta'] = $this->meta;
+            $this->debug['info']  = "This _debug are shown because the config 'api-response.api.debug' is set to true";            
+            Log::info('[teguh02/api-response] API response debug', $this->debug);
+        }
 
         $response = [
             config('api-response.api.response.data_key') => match (true) {
@@ -122,11 +135,24 @@ class ApiResponseBuilder
                     validator: $this->validator,
                 ),
             },
-
-            config('api-response.api.response.status_code_key') => $this->statusCode,
-            'meta' => $this->meta,
         ];
 
-        return response() -> json($response);
+        if (config('api-response.api.display_status_code')) {
+            $response[config('api-response.api.response.status_code_key')] = $this->statusCode;
+        }
+
+        if (config('api-response.api.display_meta')) {
+            $response['meta'] = $this->meta;
+        }
+
+        if (config('api-response.api.debug')) {
+            $response['_debug'] = $this->debug;
+        }
+
+        return response() -> json(
+            data: $response,
+            status: $this->statusCode,
+            headers: $this->headers,
+        );
     }
 }
