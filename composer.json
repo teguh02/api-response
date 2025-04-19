@@ -2,7 +2,7 @@
     "name": "teguh02/api-response",
     "description": "Laravel Package for Transform, Manipulate and Validate API Response",
     "keywords": [
-        "Teguh Rijanandi",
+        "teguh02",
         "laravel",
         "api-response"
     ],
@@ -10,13 +10,13 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Teguh Rijanandi",
+            "name": "teguh02",
             "email": "teguhrijanandi02@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.0",
         "spatie/laravel-package-tools": "^1.16",
         "illuminate/contracts": "^10.0||^11.0||^12.0"
     },
@@ -30,13 +30,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Teguh Rijanandi\\ApiResponse\\": "src/",
-            "Teguh Rijanandi\\ApiResponse\\Database\\Factories\\": "database/factories/"
+            "teguh02\\ApiResponse\\": "src/",
+            "teguh02\\ApiResponse\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Teguh Rijanandi\\ApiResponse\\Tests\\": "tests/",
+            "teguh02\\ApiResponse\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -58,10 +58,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Teguh Rijanandi\\ApiResponse\\ApiResponseServiceProvider"
+                "teguh02\\ApiResponse\\ApiResponseServiceProvider"
             ],
             "aliases": {
-                "ApiResponse": "Teguh Rijanandi\\ApiResponse\\Facades\\ApiResponse"
+                "ApiResponse": "teguh02\\ApiResponse\\Facades\\ApiResponse"
             }
         }
     },

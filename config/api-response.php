@@ -1,6 +1,6 @@
 <?php
 
-// config for Teguh Rijanandi/ApiResponse
+// config for teguh02/ApiResponse
 return [
 
 ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Teguh Rijanandi\ApiResponse\Commands;
+namespace teguh02\ApiResponse\Commands;
 
 use Illuminate\Console\Command;
 
@@ -8,7 +8,7 @@ class ApiResponseCommand extends Command
 {
     public $signature = 'api-response';
 
-    public $description = 'My command';
+    public $description = 'Laravel API Response Command';
 
     public function handle(): int
     {

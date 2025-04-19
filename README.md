@@ -52,8 +52,8 @@ php artisan vendor:publish --tag="api-response-views"
 ## Usage
 
 ```php
-$apiResponse = new Teguh Rijanandi\ApiResponse();
-echo $apiResponse->echoPhrase('Hello, Teguh Rijanandi!');
+$apiResponse = new teguh02\ApiResponse();
+echo $apiResponse->echoPhrase('Hello, teguh02!');
 ```
 
 ## Testing
@@ -76,7 +76,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Teguh Rijanandi](https://github.com/teguh02)
+- [teguh02](https://github.com/teguh02)
 - [All Contributors](../../contributors)
 
 ## License

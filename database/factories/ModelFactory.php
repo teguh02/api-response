@@ -1,6 +1,6 @@
 <?php
 
-namespace Teguh Rijanandi\ApiResponse\Database\Factories;
+namespace teguh02\ApiResponse\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 

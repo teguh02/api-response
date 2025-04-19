@@ -1,10 +1,10 @@
 <?php
 
-namespace Teguh Rijanandi\ApiResponse;
+namespace teguh02\ApiResponse;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Teguh Rijanandi\ApiResponse\Commands\ApiResponseCommand;
+use teguh02\ApiResponse\Commands\ApiResponseCommand;
 
 class ApiResponseServiceProvider extends PackageServiceProvider
 {
@@ -18,8 +18,6 @@ class ApiResponseServiceProvider extends PackageServiceProvider
         $package
             ->name('api-response')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_api_response_table')
             ->hasCommand(ApiResponseCommand::class);
     }
 }

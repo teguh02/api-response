@@ -1,5 +1,5 @@
 <?php
 
-namespace Teguh Rijanandi\ApiResponse;
+namespace teguh02\ApiResponse;
 
 class ApiResponse {}

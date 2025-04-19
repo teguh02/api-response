@@ -1,16 +1,16 @@
 <?php
 
-namespace Teguh Rijanandi\ApiResponse\Facades;
+namespace teguh02\ApiResponse\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Teguh Rijanandi\ApiResponse\ApiResponse
+ * @see \teguh02\ApiResponse\ApiResponse
  */
 class ApiResponse extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Teguh Rijanandi\ApiResponse\ApiResponse::class;
+        return \teguh02\ApiResponse\ApiResponse::class;
     }
 }
