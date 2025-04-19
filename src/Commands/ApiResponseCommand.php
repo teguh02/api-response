@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Teguh Rijanandi\ApiResponse\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class ApiResponseCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'api-response';
 
     public $description = 'My command';
 
