@@ -8,7 +8,7 @@ interface ApiTransformerInterface
      * Transform the given data for the API response.
      *
      * @param array $data
-     * @return void
+     * @return array
      */
-    public function transform(array $data);
+    public function transform(array $data) : array;
 }

@@ -8,7 +8,7 @@ interface ApiFormatterInterface
      * Format the given data for the API response.
      *
      * @param array $data
-     * @return void
+     * @return array
      */
-    public function format(array $data);
+    public function format(array $data) : array;
 }

@@ -8,7 +8,7 @@ interface ApiValidatorInterface
      * Validate the given data for the API response.
      *
      * @param array $data
-     * @return void
+     * @return array
      */
-    public function validate(array $data);
+    public function validate() : array;
 }

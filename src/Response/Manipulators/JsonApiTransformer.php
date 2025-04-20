@@ -6,6 +6,6 @@ class JsonApiTransformer
 {
     public static function make(array $data, string $transformerClass) 
     {
-        
+        return $data;
     }
 }

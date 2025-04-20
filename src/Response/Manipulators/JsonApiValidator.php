@@ -6,6 +6,6 @@ class JsonApiValidator
 {
     public static function make(array $data, string $validatorClass) 
     {
-        
+        return $data;
     }
 }

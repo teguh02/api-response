@@ -9,12 +9,14 @@ class $CLASS_NAME$ApiValidator implements ApiValidatorInterface
     /**
      * Validate the given data for the API response.
      *
-     * @param array $data
      * @return void
      */
-    public function validate(array $data) 
+    public function validate() : array
     {  
-        // write your api validator code here
-        return $data;
+        return [
+            'id' => 'int',
+
+            // write your api validator code here
+        ];
     }
 }

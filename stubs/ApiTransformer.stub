@@ -10,11 +10,14 @@ class $CLASS_NAME$ApiTransformer implements ApiTransformerInterface
      * Transform the given data for the API response.
      *
      * @param array $data
-     * @return void
+     * @return array
      */
-    public function transform(array $data) 
+    public function transform(array $data) : array
     {
-        // write your api transformer code here
-        return $data;
+        return [
+            'id' => (int) $data['id'],
+
+            // write your api transformer code here
+        ];
     }
 }

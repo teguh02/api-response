@@ -10,11 +10,14 @@ class $CLASS_NAME$ApiFormatter implements ApiFormatterInterface
      * Format the given data for the API response.
      *
      * @param array $data
-     * @return void
+     * @return array
      */
-    public function format(array $data) 
+    public function format(array $data) : array
     {
-        // write your api formatter code here
-        return $data;
+        return [
+            'id' => (int) $data['id'],
+            
+            // write your api formatter code here
+        ];
     }
 }

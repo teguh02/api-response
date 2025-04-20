@@ -54,21 +54,21 @@ class ApiResponseBuilder
     public function transformWith(?ApiTransformerInterface $transformer = null)
     {
         $this->transformer = $transformer;
-        $this->debug['transformer'] = $transformer;
+        $this->debug['transformer'] = $transformer::class;
         return $this;
     }
 
     public function formatWith(?ApiFormatterInterface $formatter = null)
     {
         $this->formatter = $formatter;
-        $this->debug['formatter'] = $formatter;
+        $this->debug['formatter'] = $formatter::class;
         return $this;
     }
 
     public function validateWith(?ApiValidatorInterface $validator = null)
     {
         $this->validator = $validator;
-        $this->debug['validator'] = $validator;
+        $this->debug['validator'] = $validator::class;
         return $this;
     }
 
