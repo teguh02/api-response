@@ -39,7 +39,11 @@ class BuilderApiResponse
 
         foreach (['transformer' => JsonApiTransformer::class, 'formatter' => JsonApiFormatter::class, 'validator' => JsonApiValidator::class] as $property => $class) {
             if (filled($this->{$property})) {
-                $data = $class::make($data->toArray(), $this->{$property}::class);
+                if (is_array($data)) {
+                    $data = $class::make($data, $this->{$property}::class);
+                } else {
+                    $data = $class::make($data->toArray(), $this->{$property}::class);
+                }
             }
         }
 
