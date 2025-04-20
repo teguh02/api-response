@@ -123,8 +123,9 @@ class ApiResponseBuilder
             $this->debug['status_code'] = $this->statusCode;
             $this->debug['headers'] = $this->headers;
             $this->debug['meta'] = $this->meta;
+            $this->debug['appends'] = $this->custom_appends_attributes;
             $this->debug['info']  = "This _debug are shown because the config 'api-response.api.debug' is set to true";            
-            Log::info('[teguh02/api-response] API response debug', $this->debug);
+            Log::debug('[teguh02/api-response] API response debug', $this->debug);
         }
 
         # Get the data
