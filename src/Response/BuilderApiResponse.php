@@ -2,11 +2,16 @@
 
 namespace teguh02\ApiResponse\Response;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use teguh02\ApiResponse\Contracts\ApiFormatterInterface;
 use teguh02\ApiResponse\Contracts\ApiTransformerInterface;
 use teguh02\ApiResponse\Contracts\ApiValidatorInterface;
 use teguh02\ApiResponse\Helpers\Pagination;
+
+use teguh02\ApiResponse\Response\Manipulators\JsonApiFormatter;
+use teguh02\ApiResponse\Response\Manipulators\JsonApiTransformer;
+use teguh02\ApiResponse\Response\Manipulators\JsonApiValidator;
 
 class BuilderApiResponse 
 {
@@ -32,6 +37,17 @@ class BuilderApiResponse
     {
         $data = $this->data->get();;
 
+        foreach (['transformer' => JsonApiTransformer::class, 'formatter' => JsonApiFormatter::class, 'validator' => JsonApiValidator::class] as $property => $class) {
+            if (filled($this->{$property})) {
+                $data = $class::make($data->toArray(), $this->{$property}::class);
+            }
+        }
+
+        // Check if $data was not collection
+        if (!$data instanceof Collection) {
+            $data = collect($data);
+        }
+
         if (config('api-response.api.pagination.enabled')) {
             $data = Pagination::paginate($data, config('api-response.api.pagination.per_page'));
 
@@ -51,7 +67,7 @@ class BuilderApiResponse
         }
 
         return [
-            'data' => isset($data['data']) ? $data['data'] : $data,
+            'data' => $data,
             'total' => $data->count(),
             'per_page' => $data->count(),
             'current_page' => 1,

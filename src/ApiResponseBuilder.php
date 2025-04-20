@@ -90,7 +90,7 @@ class ApiResponseBuilder
         return $this;
     }
 
-    public function append(string $key, mixed $value)
+    public function append(string $key, mixed $value = null)
     {
         $this->custom_appends_attributes[$key] = $value;
         return $this;
@@ -151,6 +151,11 @@ class ApiResponseBuilder
         $data = $data->build();
 
         $response[config('api-response.api.response.data_key')] = $data['data'];
+
+        // Append custom attributes to response array
+        if (filled($this->custom_appends_attributes)) {
+            $response = array_merge($response, $this->custom_appends_attributes);
+        }
 
         if (config('api-response.api.pagination.enabled')) {
             $response['pagination'] = [

@@ -8,6 +8,10 @@ use teguh02\ApiResponse\Contracts\ApiTransformerInterface;
 use teguh02\ApiResponse\Contracts\ApiValidatorInterface;
 use teguh02\ApiResponse\Helpers\Pagination;
 
+use teguh02\ApiResponse\Response\Manipulators\JsonApiFormatter;
+use teguh02\ApiResponse\Response\Manipulators\JsonApiTransformer;
+use teguh02\ApiResponse\Response\Manipulators\JsonApiValidator;
+
 class CollectionApiResponse
 {
     protected Collection $data;
@@ -32,6 +36,17 @@ class CollectionApiResponse
     {
         $data = $this->data;
 
+        foreach (['transformer' => JsonApiTransformer::class, 'formatter' => JsonApiFormatter::class, 'validator' => JsonApiValidator::class] as $property => $class) {
+            if (filled($this->{$property})) {
+                $data = $class::make($data->toArray(), $this->{$property}::class);
+            }
+        }
+
+        // Check if $data was not collection
+        if (!$data instanceof Collection) {
+            $data = collect($data);
+        }
+
         if (config('api-response.api.pagination.enabled')) {
             $data = Pagination::paginate($data, config('api-response.api.pagination.per_page'));
 
@@ -51,7 +66,7 @@ class CollectionApiResponse
         }
 
         return [
-            'data' => isset($data['data']) ? $data['data'] : $data,
+            'data' => $data,
             'total' => $data->count(),
             'per_page' => $data->count(),
             'current_page' => 1,
