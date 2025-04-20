@@ -15,20 +15,26 @@ use teguh02\ApiResponse\Response\CollectionApiResponse;
 
 class ApiResponseBuilder
 {
-    protected $data;
+    protected array|Collection|Builder|string|int|float $data;
     protected ?ApiTransformerInterface $transformer = null;
     protected ?ApiFormatterInterface $formatter = null;
     protected ?ApiValidatorInterface $validator = null;
-    protected $statusCode = 200;
-    protected $headers = [];
-    protected $meta = [];
-    protected $debug = [];
+    protected int $statusCode = 200;
+    protected ?array $headers = [];
+    protected ?array $meta = [];
+    protected ?array $debug = [];
+    protected ?array $custom_appends_attributes = [];
 
-    public function with(array|Collection|Builder $data)
+    public function with(
+        array|Collection|Builder|string|int|float $data
+    )
     {
+        if (is_string($data) or is_int($data) or is_float($data)) {
+            $data = [$data];
+        }
+
         $this->data = $data;
         $this->debug['data'] = [
-            'data' => $data,
             'type' => gettype($data),
             'query' => match (true) {
                 $data instanceof Builder => Query::toSql($data),
@@ -81,6 +87,12 @@ class ApiResponseBuilder
     public function withMeta(array $meta = [])
     {
         $this->meta = array_merge($this->meta, $meta);
+        return $this;
+    }
+
+    public function append(string $key, mixed $value)
+    {
+        $this->custom_appends_attributes[$key] = $value;
         return $this;
     }
 
