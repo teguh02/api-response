@@ -32,7 +32,10 @@
         "psr-4": {
             "teguh02\\ApiResponse\\": "src/",
             "teguh02\\ApiResponse\\Database\\Factories\\": "database/factories/"
-        }
+        },
+        "files": [
+            "src/Helpers/Package.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

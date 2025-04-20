@@ -10,9 +10,15 @@ class ApiResponseServiceProvider extends PackageServiceProvider
 {
     public function register()
     {
+        // Register the services
         $this->app->bind('api-response', function() {
             return new ApiResponseBuilder(); 
         });
+
+        // Register package helpers
+        foreach (['Package.php'] as $value) {
+            require_once __DIR__ . '/Helpers/' . $value;
+        }
 
         parent::register();
     }
