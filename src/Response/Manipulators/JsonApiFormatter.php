@@ -6,6 +6,6 @@ class JsonApiFormatter
 {
     public static function make(array $data, string $formatterClass) 
     {
-        
+        return $data;
     }
 }
