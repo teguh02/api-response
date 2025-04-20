@@ -5,6 +5,7 @@ namespace teguh02\ApiResponse\Response;
 use teguh02\ApiResponse\Contracts\ApiFormatterInterface;
 use teguh02\ApiResponse\Contracts\ApiTransformerInterface;
 use teguh02\ApiResponse\Contracts\ApiValidatorInterface;
+use teguh02\ApiResponse\Helpers\Pagination;
 
 class ArrayApiResponse 
 {
@@ -28,6 +29,38 @@ class ArrayApiResponse
 
     public function build() : array
     {
-        return [];
+        $data = collect($this->data);
+
+        if (config('api-response.api.pagination.enabled')) {
+            $data = Pagination::paginate($data, config('api-response.api.pagination.per_page'));
+
+            return [
+                'data' => $data->items(),
+                'total' => $data->total(),
+                'per_page' => $data->perPage(),
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'from' => $data->firstItem(),
+                'to' => $data->lastItem(),
+                'next_page_url' => $data->nextPageUrl(),
+                'prev_page_url' => $data->previousPageUrl(),
+                'first_page_url' => $data->url(1),
+                'last_page_url' => $data->url($data->lastPage()),
+            ];
+        }
+
+        return [
+            'data' => isset($data['data']) ? $data['data'] : $data,
+            'total' => $data->count(),
+            'per_page' => $data->count(),
+            'current_page' => 1,
+            'last_page' => 1,
+            'from' => 1,
+            'to' => $data->count(),
+            'next_page_url' => null,
+            'prev_page_url' => null,
+            'first_page_url' => null,
+            'last_page_url' => null,
+        ];
     }
 }

@@ -8,6 +8,7 @@ use teguh02\ApiResponse\Contracts\ApiFormatterInterface;
 use teguh02\ApiResponse\Contracts\ApiTransformerInterface;
 use teguh02\ApiResponse\Contracts\ApiValidatorInterface;
 use Illuminate\Support\Facades\Log;
+use teguh02\ApiResponse\Helpers\Query;
 use teguh02\ApiResponse\Response\ArrayApiResponse;
 use teguh02\ApiResponse\Response\BuilderApiResponse;
 use teguh02\ApiResponse\Response\CollectionApiResponse;
@@ -30,7 +31,7 @@ class ApiResponseBuilder
             'data' => $data,
             'type' => gettype($data),
             'query' => match (true) {
-                $data instanceof Builder => $data->toSql(),
+                $data instanceof Builder => Query::toSql($data),
                 $data instanceof Collection => $data->toArray(),
                 default => $data,
             },
@@ -97,6 +98,8 @@ class ApiResponseBuilder
 
     public function build()
     {
+        $response = [];
+
         # Set default headers and meta
         $this->headers = array_merge(config('api-response.headers', []));
         $this->meta = config('api-response.api.display_meta') 
@@ -112,30 +115,47 @@ class ApiResponseBuilder
             Log::info('[teguh02/api-response] API response debug', $this->debug);
         }
 
-        $response = [
-            config('api-response.api.response.data_key') => match (true) {
-                $this->data instanceof Builder => new BuilderApiResponse(
-                    data: $this->data,
-                    transformer: $this->transformer,
-                    formatter: $this->formatter,
-                    validator: $this->validator,
-                ),
+        # Get the data
+        $data = match (true) {
+            $this->data instanceof Builder => new BuilderApiResponse(
+                data: $this->data,
+                transformer: $this->transformer,
+                formatter: $this->formatter,
+                validator: $this->validator,
+            ),
+            $this->data instanceof Collection => new CollectionApiResponse(
+                data: $this->data,
+                transformer: $this->transformer,
+                formatter: $this->formatter,
+                validator: $this->validator,
+            ),
+            default => new ArrayApiResponse(
+                data: $this->data,
+                transformer: $this->transformer,
+                formatter: $this->formatter,
+                validator: $this->validator,
+            ),
+        };
+        $data = $data->build();
 
-                $this->data instanceof Collection => new CollectionApiResponse(
-                    data: $this->data,
-                    transformer: $this->transformer,
-                    formatter: $this->formatter,
-                    validator: $this->validator,
-                ),
+        $response[config('api-response.api.response.data_key')] = $data['data'];
 
-                default => new ArrayApiResponse(
-                    data: $this->data,
-                    transformer: $this->transformer,
-                    formatter: $this->formatter,
-                    validator: $this->validator,
-                ),
-            },
-        ];
+        if (config('api-response.api.pagination.enabled')) {
+            $response['pagination'] = [
+                'total' => $data['total'],
+                'per_page' => $data['per_page'],
+                'current_page' => $data['current_page'],
+                'last_page' => $data['last_page'],
+                'from' => $data['from'],
+                'to' => $data['to'],
+                'url' => [
+                    'first_page' => $data['first_page_url'],
+                    'last_page' => $data['last_page_url'],
+                    'next_page' => $data['next_page_url'],
+                    'prev_page' => $data['prev_page_url'],
+                ],
+            ];   
+        }
 
         if (config('api-response.api.display_status_code')) {
             $response[config('api-response.api.response.status_code_key')] = $this->statusCode;
