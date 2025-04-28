@@ -18,7 +18,7 @@ return [
     */
 
     'api' => [
-        'debug' => env('API_DEBUG', true),
+        'debug' => env('API_DEBUG', false),
         'display_meta' => env('API_DISPLAY_META', true),
         'display_status_code' => env('API_DISPLAY_STATUS_CODE', true),
 

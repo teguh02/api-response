@@ -115,8 +115,8 @@ class ApiResponseBuilder
         # Set default headers and meta
         $this->headers = array_merge(config('api-response.headers', []));
         $this->meta = config('api-response.api.display_meta') 
-            ? array_merge(config('api-response.meta', [])) 
-            : [];
+            ? array_merge(config('api-response.meta', []), $this->meta) 
+            : $this->meta;
 
         # For Debugging purposes
         if (config('api-response.api.debug')) {
