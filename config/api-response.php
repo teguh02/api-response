@@ -61,6 +61,5 @@ return [
     'meta' => [
         'version' => '1.0.0',
         'server_time' => now()->toDateTimeString(),
-        'client_ip' => request()->ip(),
     ],
 ];
